@@ -1,21 +1,19 @@
-# Notes-App
+# 📝 Notes API Service
 
-FastAPI + PostgreSQL backend project.
+> A fully functional REST API application for creating and managing notes. Built with FastAPI, PostgreSQL, and completely containerized using Docker.
 
-## Features
+## 🚀 Tech Stack
 
-- Create notes
-- Get all notes
-- PostgreSQL database
+- Framework: FastAPI
+- Database: PostgreSQL
+- Container: Docker Compose
+- Cloud Hosting: Render
 
-## Tech Stack
+## 🔗 Live Demo (Render)
 
-- Python
-- FastAPI
-- PostgreSQL
-- SQLALchemy
+👉 https://notes-app-vclf.onrender.com/
 
-## Run
+## ⚙️ How to run locally
 
-'''bash
-uvicorn main:app --reload
+1. Run command: docker compose up --build
+2. Open in browser: http://localhost:8080/
