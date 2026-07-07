@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
+from fastapi.responses import RedirectResponse
 
 import models
 import schemas
@@ -8,7 +9,18 @@ from database import SessionLocal, engine, Base
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="📝 Notes Service API",
+    description="""
+    ### Вітаємо у Notes API! 🎉
+    Цей сервіс дозволяє створювати, переглядати та редагувати ваші особисті нотатки.
+    
+    * База даних: PostgreSQL 🐘
+    * Статус деплою: Live на Render 🚀
+    """,
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url=None)
 
 def get_db():
     db = SessionLocal()
@@ -17,10 +29,10 @@ def get_db():
     finally:
         db.close()
         
-@app.get("/")
-def home():
-    return {"message": "Notes API works!"}
-        
+@app.get("/", include_in_schema=False)
+def redirect_to_docs():
+    return RedirectResponse(url="/docs")
+
 @app.post("/notes/")
 def create_note(note: schemas.NoteCreate, db: Session = Depends(get_db)):
     new_note = models.Note(title=note.title, content=note.content)
