@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 import models
@@ -33,15 +33,13 @@ def create_note(note: schemas.NoteCreate, db: Session = Depends(get_db)):
 def get_notes(db: Session = Depends(get_db)):
     notes = db.query(models.Note).all()
     return notes
-
 @app.get("/notes/{note_id}")
 def get_note(note_id: int, db: Session = Depends(get_db)):
     note = db.query(models.Note).filter(models.Note.id == note_id).first()
     if note:
         return note
     else:
-        return {"message": "Note not found"}
-
+        raise HTTPException(status_code=404, detail="Note not found")
     
     
 @app.put("/notes/{note_id}")
@@ -54,8 +52,7 @@ def update_note(note_id: int, note: schemas.NoteCreate, db: Session = Depends(ge
         db.refresh(existing_note)
         return existing_note
     else:
-        return {"message": "Note not found"}
-    
+        raise HTTPException(status_code=404, detail="Note not found")
 
 @app.delete("/notes/{note_id}") 
 def delete_note(note_id: int, db: Session = Depends(get_db)):
@@ -65,4 +62,4 @@ def delete_note(note_id: int, db: Session = Depends(get_db)):
         db.commit()
         return {"message": "Note deleted successfully"}
     else:
-        return {"message": "Note not found"}
+        raise HTTPException(status_code=404, detail="Note not found")
